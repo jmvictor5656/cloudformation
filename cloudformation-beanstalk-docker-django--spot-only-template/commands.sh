@@ -1,0 +1,1 @@
+aws cloudformation create-stack --stack-name sample-app --template-body file://source.yaml --capabilities CAPABILITY_NAMED_IAM
