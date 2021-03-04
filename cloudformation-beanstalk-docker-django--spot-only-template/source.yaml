@@ -1,4 +1,53 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: '2010-09-09' 
+Description: "Template for beanstalk service to deploy a sample django using only spot instances as default"
+Parameters:
+  InstanceTypeParameter:
+    Type: String
+    Default: t3.small
+    AllowedValues:
+      - "t3.small"
+    Description: "Enter instance type"
+  # Min instance for load balance
+  MinInstanceParameter:
+    Type: Number
+    Default: 1
+    MinValue: 1
+    MaxValue: 3
+  # Max instances for a load
+  MaxInstanceParameter:
+    Type: Number
+    Default: 1
+    Description: "What should be the maximum number of instances for loadbalancer"
+    MinValue: 1
+    MaxValue: 3
+  EnableSpotParameter:
+    Type: String
+    Default: true
+    Description: "Should there be spot instances while autoscaling"
+  
+  SpotFleetOnDemandBaseParameter:
+    Type: Number
+    Default: 0
+    Description: "What should be minimum ondemand instances while autoscaling"
+    MinValue: 0
+    MaxValue: 3
+  
+  SpotFleetOnDemandAboveBasePercentageParameter:
+    Type: Number
+    Default: 0
+    Description: "Percentage of OnDemand instances while autoscaling"
+    MinValue: 0
+    MaxValue: 100
+
+  SpotMaxPriceParameter:
+    Type: Number
+    Default: 0.01
+    Description: "Maximum dollars you are ready to pay for an ec2 instance"
+    MinValue: 0
+    MaxValue: 19
+ 
+    
+
 Resources:
   sampleApplication:
     Type: AWS::ElasticBeanstalk::Application
@@ -11,8 +60,8 @@ Resources:
         Ref: sampleApplication
       Description: AWS ElasticBeanstalk Sample Application Version
       SourceBundle:
-        S3Bucket: "cloudformation-beanstalk"
-        S3Key: "Dockerrun.aws.json"
+        S3Bucket: "< FIll S3 Bucket Name>"
+        S3Key: "<Fill key of Dockerrun.aws.json in case of Docker>"
   sampleConfigurationTemplate:
     Type: AWS::ElasticBeanstalk::ConfigurationTemplate
     Properties:
@@ -22,10 +71,10 @@ Resources:
       OptionSettings:
       - Namespace: aws:autoscaling:asg
         OptionName: MinSize
-        Value: '1'
+        Value: !Ref MinInstanceParameter
       - Namespace: aws:autoscaling:asg
         OptionName: MaxSize
-        Value: '1'
+        Value: !Ref MaxInstanceParameter
       - Namespace: aws:elasticbeanstalk:environment
         OptionName: EnvironmentType
         Value: LoadBalanced
@@ -34,19 +83,19 @@ Resources:
         Value: !Ref MyInstanceProfile
       - Namespace: aws:autoscaling:launchconfiguration
         OptionName: InstanceType
-        Value: 't3.small'
+        Value: !Ref InstanceTypeParameter
       - Namespace: aws:ec2:instances
         OptionName: EnableSpot
-        Value: true
+        Value: !Ref EnableSpotParameter
       - Namespace: aws:ec2:instances
         OptionName: SpotFleetOnDemandBase
-        Value: '0'
+        Value: !Ref SpotFleetOnDemandBaseParameter
       - Namespace: aws:ec2:instances
         OptionName: SpotFleetOnDemandAboveBasePercentage
-        Value: '0'
+        Value: !Ref SpotFleetOnDemandAboveBasePercentageParameter
       - Namespace: aws:ec2:instances
         OptionName: SpotMaxPrice
-        Value: '0.01'
+        Value: !Ref SpotMaxPriceParameter
       SolutionStackName: "64bit Amazon Linux 2 v3.2.4 running Docker"
   sampleEnvironment:
     Type: AWS::ElasticBeanstalk::Environment
