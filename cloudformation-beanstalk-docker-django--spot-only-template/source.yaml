@@ -45,8 +45,16 @@ Parameters:
     Description: "Maximum dollars you are ready to pay for an ec2 instance"
     MinValue: 0
     MaxValue: 19
+
+  SourceBucketParameter:
+    type: string
+    Description: "Bucker name where source file is present example: abc"
+  
+  SourceKeyParameter:
+    type: string
+    Description: "Full path of the file in s3 where file is present excluding bucket name"
+    Default: "Dockerrun.aws.json"
  
-    
 
 Resources:
   sampleApplication:
@@ -60,8 +68,8 @@ Resources:
         Ref: sampleApplication
       Description: AWS ElasticBeanstalk Sample Application Version
       SourceBundle:
-        S3Bucket: "< FIll S3 Bucket Name>"
-        S3Key: "<Fill key of Dockerrun.aws.json in case of Docker>"
+        S3Bucket: !Ref SourceBucketParameter
+        S3Key: !Ref SourceKeyParameter
   sampleConfigurationTemplate:
     Type: AWS::ElasticBeanstalk::ConfigurationTemplate
     Properties:
