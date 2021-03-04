@@ -6,7 +6,7 @@
 Current template is for deploying docker based webapp via elastic beanstalk but is configurable for other formats as well like python/go/.net (all those which are supported by elastic beanstalk)
 
 # usage for Django
-for Django starter there is a Docker image which can be used as it is and ALLOWED_HOSTS = ["*"] in settings.py.
+for Django starter there is a Dockerfile in repo which can be used as it is and update ALLOWED_HOSTS = ["*"] in settings.py.
 After creating Docker Image in DockerHub just update `Name` in `Dockerrun.aws.json` with public image.
 
 # For others
