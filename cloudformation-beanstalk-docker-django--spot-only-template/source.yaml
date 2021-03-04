@@ -23,6 +23,9 @@ Parameters:
   EnableSpotParameter:
     Type: String
     Default: true
+    AllowedValues:
+      - true
+      - false
     Description: "Should there be spot instances while autoscaling"
   
   SpotFleetOnDemandBaseParameter:
