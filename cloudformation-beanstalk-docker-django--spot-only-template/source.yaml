@@ -50,11 +50,11 @@ Parameters:
     MaxValue: 19
 
   SourceBucketParameter:
-    type: string
+    Type: String
     Description: "Bucker name where source file is present example: abc"
   
   SourceKeyParameter:
-    type: string
+    Type: String
     Description: "Full path of the file in s3 where file is present excluding bucket name"
     Default: "Dockerrun.aws.json"
  
